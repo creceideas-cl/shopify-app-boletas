@@ -1,0 +1,38 @@
+name: deploy ${{ secrets.APP_NAME }}
+on:
+  push:
+    branches:
+      - deploy
+
+jobs:
+  name: build and deploy
+  runs-on: ubuntu-latest
+  steps:
+    - name: Remote VPS Server (ssh)
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        password: ${{ secrets.VPS_PASSWORD }}
+        port: ${{ secrets.VPS_PORT }}
+        script: |
+          # Verificar versiones
+          node -v
+          npm -v
+          pm2 -v
+
+          # Entrar en el directorio de la app, si no existe, crearla
+          if [ ! -d "/var/www/${{ secrets.APP_NAME }}" ]; then
+            mkdir -p /var/www/${{ secrets.APP_NAME }}
+          fi
+          cd /var/www/${{ secrets.APP_NAME }}
+
+          # pull latest changes
+          git pull
+
+          # instala dependencias del backend
+          cd /var/www/${{ secrets.APP_NAME }}/boleta-backend
+          npm install
+          # npm run build // el backend no necesita build
+
+          pm2 restart all
