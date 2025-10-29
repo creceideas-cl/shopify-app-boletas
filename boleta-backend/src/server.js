@@ -13,7 +13,7 @@ import salesRoutes from "./routes/sales.js";
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get("/", (req, res) => res.send("✅ Boleta Backend activo"));
+app.get("/", (req, res) => res.send("🚀"));
 
 // Rutas principales
 app.use("/api/sales", salesRoutes);
