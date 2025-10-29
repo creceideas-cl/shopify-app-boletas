@@ -6,6 +6,6 @@ const router = express.Router();
 router.post("/", receiveSale);
 
 // Ruta para obtener todas las ventas con filtros
-router.get("/", getAllSales);
+//router.get("/", getAllSales);
 
 export default router;
